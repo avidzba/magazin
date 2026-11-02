@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>МойСклад Касса POS</title>
+    <meta name="description" content="Быстрая веб-касса магазина (POS) в стиле МойСклад: учет клиентских долгов, интеграция с движением финансов, сканер штрихкодов, горячие клавиши и полный офлайн-режим PWA." />
+    <meta property="og:title" content="МойСклад Касса POS" />
+    <meta property="og:description" content="Быстрая веб-касса магазина (POS) в стиле МойСклад: учет клиентских долгов, интеграция с движением финансов, сканер штрихкодов, горячие клавиши и полный офлайн-режим PWA." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1e293b" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="МойСклад POS" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <script>
+      (function () {
+        // Suppress Vite HMR WebSocket errors in iframe/Cloud Run environments
+        window.addEventListener('unhandledrejection', function (event) {
+          var reason = event && event.reason;
+          var msg = (reason && (reason.message || reason.stack || String(reason))) || '';
+          if (msg.indexOf('WebSocket') !== -1 || msg.indexOf('vite-hmr') !== -1) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+          }
+        });
+        window.addEventListener('error', function (event) {
+          var msg = (event && (event.message || '')) || '';
+          var filename = (event && event.filename) || '';
+          if (msg.indexOf('WebSocket') !== -1 || filename.indexOf('@vite/client') !== -1) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+          }
+        });
+
+        try {
+          var saved = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (saved === 'dark' || (!saved && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white transition-colors duration-150">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js')
+            .then(function (reg) {
+              console.log('PWA ServiceWorker registered with scope:', reg.scope);
+            })
+            .catch(function (err) {
+              console.warn('PWA ServiceWorker registration failed:', err);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>

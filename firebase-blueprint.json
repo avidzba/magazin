@@ -1,0 +1,472 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "System staff user account profile with RBAC role",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID",
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 150
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User full name or employee label",
+          "maxLength": 150
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "cashier"],
+          "description": "RBAC role: admin has full back-office access; cashier is restricted to /pos"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Account creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last profile update timestamp"
+        }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "StoreProduct": {
+      "title": "StoreProduct",
+      "description": "Product catalog item in the store",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Product name",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "price": {
+          "type": "number",
+          "description": "Selling price of product in currency units"
+        },
+        "purchasePrice": {
+          "type": "number",
+          "description": "Purchase cost of product"
+        },
+        "stockQuantity": {
+          "type": "number",
+          "description": "Current quantity in stock"
+        },
+        "barcode": {
+          "type": "string",
+          "description": "Barcode or SKU code",
+          "maxLength": 64
+        },
+        "category": {
+          "type": "string",
+          "description": "Category name",
+          "maxLength": 100
+        },
+        "isHot": {
+          "type": "boolean",
+          "description": "Whether this product is featured as a hot button for fast touch checkout"
+        },
+        "hotColor": {
+          "type": "string",
+          "description": "Color theme for hot tile button",
+          "maxLength": 50
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["name", "price", "stockQuantity"]
+    },
+    "StoreInventoryDoc": {
+      "title": "StoreInventoryDoc",
+      "description": "Inventory movement document (receipt, write_off, inventory audit)",
+      "type": "object",
+      "properties": {
+        "docNumber": {
+          "type": "string",
+          "description": "Human readable document number (e.g. ПР-001, СП-001, ИНВ-001)",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": ["receipt", "write_off", "inventory"],
+          "description": "Movement document type"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "posted"],
+          "description": "Document posting state"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Document date"
+        },
+        "authorId": {
+          "type": "string",
+          "description": "Author UID",
+          "maxLength": 128
+        },
+        "authorName": {
+          "type": "string",
+          "description": "Author display name",
+          "maxLength": 150
+        },
+        "items": {
+          "type": "array",
+          "description": "Document item lines"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total sum or valuation of the document"
+        },
+        "supplier": {
+          "type": "string",
+          "description": "Supplier name",
+          "maxLength": 200
+        },
+        "comment": {
+          "type": "string",
+          "description": "Optional notes or reason description",
+          "maxLength": 500
+        },
+        "reason": {
+          "type": "string",
+          "description": "Specific reason for write-off or adjustment",
+          "maxLength": 100
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "postedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Posting timestamp"
+        }
+      },
+      "required": ["docNumber", "type", "status", "items", "totalAmount"]
+    },
+    "StoreCustomer": {
+      "title": "StoreCustomer",
+      "description": "Customer entity with debt tracking",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Customer full name",
+          "minLength": 1,
+          "maxLength": 150
+        },
+        "phone": {
+          "type": "string",
+          "description": "Customer phone number",
+          "maxLength": 50
+        },
+        "totalDebt": {
+          "type": "number",
+          "description": "Current total debt of the customer"
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional notes on customer",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["name", "totalDebt"]
+    },
+    "StoreOrder": {
+      "title": "StoreOrder",
+      "description": "Sales order / receipt record",
+      "type": "object",
+      "properties": {
+        "totalAmount": {
+          "type": "number",
+          "description": "Total receipt amount"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "enum": ["cash", "card", "debt"],
+          "description": "Payment method chosen"
+        },
+        "items": {
+          "type": "array",
+          "description": "Purchased items list"
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Customer ID if debt or customer attached",
+          "maxLength": 128
+        },
+        "customerName": {
+          "type": "string",
+          "description": "Customer name if attached",
+          "maxLength": 150
+        },
+        "shiftId": {
+          "type": "string",
+          "description": "Linked shift ID",
+          "maxLength": 128
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Order creation date"
+        },
+        "receiptNumber": {
+          "type": "string",
+          "description": "Human readable receipt number",
+          "maxLength": 64
+        },
+        "orderNumber": {
+          "type": "number",
+          "description": "Sequential incrementing order number"
+        }
+      },
+      "required": ["totalAmount", "paymentMethod", "items"]
+    },
+    "StoreShift": {
+      "title": "StoreShift",
+      "description": "Cash register shift records with cash reconciliation and Z-report",
+      "type": "object",
+      "properties": {
+        "startCash": {
+          "type": "number",
+          "description": "Opening cash balance (carried over from previous shift)"
+        },
+        "endExpectedCash": {
+          "type": "number",
+          "description": "Calculated expected cash at shift close"
+        },
+        "endActualCash": {
+          "type": "number",
+          "description": "Actual physical cash counted by cashier"
+        },
+        "totalCash": {
+          "type": "number",
+          "description": "Total cash sales during shift"
+        },
+        "totalCard": {
+          "type": "number",
+          "description": "Total card/transfer sales during shift"
+        },
+        "totalDebt": {
+          "type": "number",
+          "description": "Total sales on credit during shift"
+        },
+        "totalCashIn": {
+          "type": "number",
+          "description": "Total manual cash deposits"
+        },
+        "totalCashOut": {
+          "type": "number",
+          "description": "Total manual cash withdrawals"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "closed"],
+          "description": "Shift status"
+        },
+        "openTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Shift opening timestamp"
+        },
+        "closeTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Shift closing timestamp"
+        },
+        "cashierId": {
+          "type": "string",
+          "description": "Cashier identifier",
+          "maxLength": 128
+        },
+        "cashierName": {
+          "type": "string",
+          "description": "Cashier name",
+          "maxLength": 150
+        }
+      },
+      "required": ["startCash", "status"]
+    },
+    "StoreCashFlow": {
+      "title": "StoreCashFlow",
+      "description": "Cash flow operations inside register (cash in / out)",
+      "type": "object",
+      "properties": {
+        "shiftId": {
+          "type": "string",
+          "description": "Current shift identifier",
+          "maxLength": 128
+        },
+        "type": {
+          "type": "string",
+          "enum": ["in", "out"],
+          "description": "Operation type: in (внесение) or out (изъятие)"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Amount of cash moved"
+        },
+        "category": {
+          "type": "string",
+          "description": "Reason/category (e.g. Оплата поставщику, Зарплата, Инкассация, Хозрасходы)",
+          "maxLength": 100
+        },
+        "source": {
+          "type": "string",
+          "enum": ["cash_drawer", "bank_account"],
+          "description": "Source of payment: from cash drawer or from bank account"
+        },
+        "note": {
+          "type": "string",
+          "description": "Additional comment or memo",
+          "maxLength": 300
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Operation timestamp"
+        }
+      },
+      "required": ["type", "amount", "category"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Shared financial cash flow income/expense transaction",
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "description": "Target store account identifier",
+          "maxLength": 64
+        },
+        "type": {
+          "type": "string",
+          "enum": ["income", "expense"],
+          "description": "Financial transaction type"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Payment amount"
+        },
+        "category": {
+          "type": "string",
+          "description": "Financial category",
+          "maxLength": 100
+        },
+        "source": {
+          "type": "string",
+          "description": "Funding source (cash / account)",
+          "maxLength": 50
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Transaction date"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human readable memo",
+          "maxLength": 300
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Related order ID if applicable",
+          "maxLength": 128
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Related customer ID if applicable",
+          "maxLength": 128
+        }
+      },
+      "required": ["accountId", "type", "amount", "category"]
+    },
+    "MetadataCounter": {
+      "title": "MetadataCounter",
+      "description": "System metadata sequential counters for documents",
+      "type": "object",
+      "properties": {
+        "receiptCount": {
+          "type": "number",
+          "description": "Counter for goods receipt documents"
+        },
+        "writeOffCount": {
+          "type": "number",
+          "description": "Counter for goods write-off documents"
+        },
+        "inventoryCount": {
+          "type": "number",
+          "description": "Counter for inventory audit documents"
+        }
+      }
+    }
+  },
+  "firestore": {
+    "/metadata/{docId}": {
+      "schema": { "$ref": "MetadataCounter" },
+      "description": "System metadata counters"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "User profiles and RBAC role assignments"
+    },
+    "/store_products/{productId}": {
+      "schema": { "$ref": "StoreProduct" },
+      "description": "Store products catalog"
+    },
+    "/store_inventory_docs/{docId}": {
+      "schema": { "$ref": "StoreInventoryDoc" },
+      "description": "Inventory movement documents (receipts, write-offs, stock audit)"
+    },
+    "/store_customers/{customerId}": {
+      "schema": { "$ref": "StoreCustomer" },
+      "description": "Store customer database with totalDebt"
+    },
+    "/store_orders/{orderId}": {
+      "schema": { "$ref": "StoreOrder" },
+      "description": "Receipts and sales orders"
+    },
+    "/store_shifts/{shiftId}": {
+      "schema": { "$ref": "StoreShift" },
+      "description": "Register shift management records"
+    },
+    "/store_cash_flows/{flowId}": {
+      "schema": { "$ref": "StoreCashFlow" },
+      "description": "Cash deposits and withdrawals during shift"
+    },
+    "/transactions/{transactionId}": {
+      "schema": { "$ref": "Transaction" },
+      "description": "Shared accounting income and expense records"
+    }
+  }
+}

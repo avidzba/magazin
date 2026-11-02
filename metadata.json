@@ -1,0 +1,6 @@
+{
+  "name": "МойСклад Касса POS",
+  "description": "Быстрая веб-касса магазина (POS) в стиле МойСклад: учет клиентских долгов, интеграция с движением финансов, сканер штрихкодов, горячие клавиши и полный офлайн-режим PWA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

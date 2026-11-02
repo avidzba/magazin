@@ -1,0 +1,286 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+    background-color: #0b1120;
+    color: #f1f5f9;
+  }
+
+  body.dark,
+  .dark body {
+    background-color: #0b1120;
+    color: #f1f5f9;
+  }
+}
+
+/* ==========================================================================
+   Global Dark Theme Adaptation for Cards, Tables, Modals, Inputs & Dropdowns
+   ========================================================================== */
+
+/* 1. Page & Section Backgrounds */
+.dark .bg-slate-100 {
+  background-color: #0b1120 !important;
+}
+
+.dark .bg-slate-100\/80 {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+}
+
+.dark .bg-slate-50,
+.dark .bg-gray-50 {
+  background-color: #111827 !important;
+}
+
+.dark .bg-slate-50\/80,
+.dark .bg-slate-50\/70,
+.dark .bg-slate-50\/60,
+.dark .bg-slate-50\/50,
+.dark .bg-slate-50\/40,
+.dark .bg-slate-50\/30 {
+  background-color: rgba(17, 24, 39, 0.75) !important;
+}
+
+.dark .bg-slate-200,
+.dark .bg-slate-200\/60,
+.dark .bg-slate-200\/70,
+.dark .bg-slate-200\/80 {
+  background-color: #1e293b !important;
+}
+
+/* 2. Cards, Modals, Drawers, Tables & Header Surfaces */
+.dark .bg-white {
+  background-color: #1e293b !important;
+}
+
+.dark .bg-white\/80,
+.dark .bg-white\/90 {
+  background-color: rgba(30, 41, 59, 0.92) !important;
+}
+
+/* 3. Typography & Text Contrast */
+.dark .text-slate-900,
+.dark .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+.dark .text-slate-800,
+.dark .text-gray-800 {
+  color: #f1f5f9 !important;
+}
+
+.dark .text-slate-700,
+.dark .text-gray-700 {
+  color: #e2e8f0 !important;
+}
+
+.dark .text-slate-600,
+.dark .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-500,
+.dark .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+.dark .text-slate-400,
+.dark .text-gray-400 {
+  color: #64748b !important;
+}
+
+/* 4. Borders & Dividers */
+.dark .border-slate-100,
+.dark .border-gray-100 {
+  border-color: #1e293b !important;
+}
+
+.dark .border-slate-200,
+.dark .border-slate-200\/60,
+.dark .border-slate-200\/80,
+.dark .border-gray-200 {
+  border-color: #334155 !important;
+}
+
+.dark .border-slate-300,
+.dark .border-gray-300 {
+  border-color: #475569 !important;
+}
+
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #334155 !important;
+}
+
+/* 5. Inputs, Selects, Textareas & Comboboxes */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+.dark select,
+.dark textarea {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border-color: #475569 !important;
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"])::placeholder,
+.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):focus,
+.dark select:focus,
+.dark textarea:focus {
+  background-color: #0f172a !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+.dark select option {
+  background-color: #1e293b;
+  color: #f8fafc;
+}
+
+/* 6. Tables & Row Hover States */
+.dark thead,
+.dark thead tr,
+.dark thead th {
+  background-color: #0f172a !important;
+  color: #94a3b8 !important;
+  border-color: #334155 !important;
+}
+
+.dark tbody tr {
+  border-color: #334155 !important;
+}
+
+.dark tbody tr:hover,
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-50\/80:hover,
+.dark .hover\:bg-slate-100:hover,
+.dark .hover\:bg-gray-50:hover {
+  background-color: rgba(51, 65, 85, 0.55) !important;
+}
+
+.dark .hover\:bg-blue-50\/30:hover,
+.dark .hover\:bg-blue-50\/40:hover,
+.dark .hover\:bg-blue-50\/50:hover,
+.dark .hover\:bg-blue-50\/70:hover,
+.dark .hover\:bg-blue-50:hover {
+  background-color: rgba(37, 99, 235, 0.2) !important;
+}
+
+/* 7. Semantic Accents, Badges & Alert Panels in Dark Mode */
+.dark .bg-blue-50,
+.dark .bg-blue-50\/70,
+.dark .bg-blue-50\/50,
+.dark .bg-blue-50\/30 {
+  background-color: rgba(37, 99, 235, 0.18) !important;
+}
+.dark .bg-blue-100,
+.dark .bg-blue-100\/50 {
+  background-color: rgba(37, 99, 235, 0.28) !important;
+}
+.dark .text-blue-900,
+.dark .text-blue-800,
+.dark .text-blue-700 {
+  color: #93c5fd !important;
+}
+.dark .border-blue-100,
+.dark .border-blue-200,
+.dark .border-blue-300 {
+  border-color: rgba(59, 130, 246, 0.4) !important;
+}
+
+.dark .bg-emerald-50,
+.dark .bg-emerald-50\/70,
+.dark .bg-emerald-50\/60,
+.dark .bg-emerald-50\/50,
+.dark .bg-emerald-50\/40 {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+}
+.dark .bg-emerald-100 {
+  background-color: rgba(16, 185, 129, 0.26) !important;
+}
+.dark .text-emerald-900,
+.dark .text-emerald-800,
+.dark .text-emerald-700 {
+  color: #6ee7b7 !important;
+}
+.dark .border-emerald-100,
+.dark .border-emerald-200,
+.dark .border-emerald-300 {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+.dark .bg-amber-50,
+.dark .bg-amber-50\/70,
+.dark .bg-amber-50\/60,
+.dark .bg-amber-50\/50 {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+}
+.dark .bg-amber-100 {
+  background-color: rgba(245, 158, 11, 0.26) !important;
+}
+.dark .text-amber-900,
+.dark .text-amber-800,
+.dark .text-amber-700 {
+  color: #fcd34d !important;
+}
+.dark .border-amber-100,
+.dark .border-amber-200,
+.dark .border-amber-300 {
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+.dark .bg-rose-50,
+.dark .bg-rose-50\/70,
+.dark .bg-rose-50\/50,
+.dark .bg-rose-50\/40 {
+  background-color: rgba(244, 63, 94, 0.16) !important;
+}
+.dark .bg-rose-100 {
+  background-color: rgba(244, 63, 94, 0.26) !important;
+}
+.dark .text-rose-900,
+.dark .text-rose-800,
+.dark .text-rose-700 {
+  color: #fda4af !important;
+}
+.dark .border-rose-100,
+.dark .border-rose-200,
+.dark .border-rose-300 {
+  border-color: rgba(244, 63, 94, 0.4) !important;
+}
+
+.dark .bg-indigo-50,
+.dark .bg-indigo-50\/80,
+.dark .bg-indigo-50\/60,
+.dark .bg-indigo-50\/40,
+.dark .bg-purple-50 {
+  background-color: rgba(99, 102, 241, 0.18) !important;
+}
+.dark .bg-indigo-100,
+.dark .bg-purple-100 {
+  background-color: rgba(99, 102, 241, 0.28) !important;
+}
+.dark .text-indigo-950,
+.dark .text-indigo-900,
+.dark .text-indigo-800,
+.dark .text-indigo-700,
+.dark .text-purple-800,
+.dark .text-purple-700 {
+  color: #a5b4fc !important;
+}
+.dark .border-indigo-100,
+.dark .border-indigo-200,
+.dark .border-indigo-300,
+.dark .border-purple-200 {
+  border-color: rgba(99, 102, 241, 0.4) !important;
+}

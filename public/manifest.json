@@ -1,0 +1,37 @@
+{
+  "id": "/",
+  "name": "МойСклад Касса POS",
+  "short_name": "МойСклад POS",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#1e293b",
+  "background_color": "#f8fafc",
+  "description": "Быстрая веб-касса магазина (POS) в стиле МойСклад: учет клиентских долгов, интеграция с движением финансов, сканер штрихкодов и офлайн-режим",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

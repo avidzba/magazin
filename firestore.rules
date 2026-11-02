@@ -1,0 +1,219 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidUser(data) {
+      return data.uid is string && data.uid.size() <= 128
+        && data.email is string && data.email.size() <= 150
+        && data.role in ['admin', 'cashier']
+        && (!('displayName' in data) || data.displayName == null || (data.displayName is string && data.displayName.size() <= 150));
+    }
+
+    function isValidProduct(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && data.price is number && data.price >= 0
+        && data.stockQuantity is number
+        && (!('retailPrice' in data) || data.retailPrice == null || data.retailPrice is number)
+        && (!('barcode' in data) || data.barcode == null || (data.barcode is string && data.barcode.size() <= 64))
+        && (!('barcodes' in data) || data.barcodes == null || data.barcodes is list)
+        && (!('category' in data) || data.category == null || (data.category is string && data.category.size() <= 100))
+        && (!('unit' in data) || data.unit == null || (data.unit is string && data.unit.size() <= 30))
+        && (!('purchasePrice' in data) || data.purchasePrice == null || data.purchasePrice is number)
+        && (!('isHot' in data) || data.isHot == null || data.isHot is bool)
+        && (!('hotColor' in data) || data.hotColor == null || (data.hotColor is string && data.hotColor.size() <= 50))
+        && (!('isArchived' in data) || data.isArchived == null || data.isArchived is bool)
+        && (!('minStock' in data) || data.minStock == null || data.minStock is number)
+        && (!('primarySupplierId' in data) || data.primarySupplierId == null || (data.primarySupplierId is string && data.primarySupplierId.size() <= 128))
+        && (!('primarySupplierName' in data) || data.primarySupplierName == null || (data.primarySupplierName is string && data.primarySupplierName.size() <= 200));
+    }
+
+    function isValidInventoryDoc(data) {
+      return data.docNumber is string && data.docNumber.size() <= 64
+        && data.type in ['receipt', 'write_off', 'inventory']
+        && data.status in ['draft', 'posted']
+        && data.items is list
+        && data.totalAmount is number
+        && (!('authorId' in data) || data.authorId == null || (data.authorId is string && data.authorId.size() <= 128))
+        && (!('authorName' in data) || data.authorName == null || (data.authorName is string && data.authorName.size() <= 150))
+        && (!('supplier' in data) || data.supplier == null || (data.supplier is string && data.supplier.size() <= 200))
+        && (!('supplierId' in data) || data.supplierId == null || (data.supplierId is string && data.supplierId.size() <= 128))
+        && (!('isPaidImmediately' in data) || data.isPaidImmediately == null || data.isPaidImmediately is bool)
+        && (!('comment' in data) || data.comment == null || (data.comment is string && data.comment.size() <= 500))
+        && (!('reason' in data) || data.reason == null || (data.reason is string && data.reason.size() <= 100))
+        && (!('shortageCount' in data) || data.shortageCount == null || data.shortageCount is number)
+        && (!('surplusCount' in data) || data.surplusCount == null || data.surplusCount is number)
+        && (!('exactCount' in data) || data.exactCount == null || data.exactCount is number)
+        && (!('shortageCostSum' in data) || data.shortageCostSum == null || data.shortageCostSum is number)
+        && (!('shortageRetailSum' in data) || data.shortageRetailSum == null || data.shortageRetailSum is number)
+        && (!('surplusCostSum' in data) || data.surplusCostSum == null || data.surplusCostSum is number)
+        && (!('surplusRetailSum' in data) || data.surplusRetailSum == null || data.surplusRetailSum is number)
+        && (!('netCostSum' in data) || data.netCostSum == null || data.netCostSum is number)
+        && (!('netRetailSum' in data) || data.netRetailSum == null || data.netRetailSum is number)
+        && (!('writeOffDocNumber' in data) || data.writeOffDocNumber == null || (data.writeOffDocNumber is string && data.writeOffDocNumber.size() <= 64))
+        && (!('writeOffDocId' in data) || data.writeOffDocId == null || (data.writeOffDocId is string && data.writeOffDocId.size() <= 128))
+        && (!('receiptDocNumber' in data) || data.receiptDocNumber == null || (data.receiptDocNumber is string && data.receiptDocNumber.size() <= 64))
+        && (!('receiptDocId' in data) || data.receiptDocId == null || (data.receiptDocId is string && data.receiptDocId.size() <= 128))
+        && (!('shiftId' in data) || data.shiftId == null || (data.shiftId is string && data.shiftId.size() <= 128));
+    }
+
+    function isValidCustomer(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 150
+        && data.totalDebt is number
+        && (!('phone' in data) || data.phone == null || (data.phone is string && data.phone.size() <= 50))
+        && (!('note' in data) || data.note == null || (data.note is string && data.note.size() <= 500));
+    }
+
+    function isValidOrder(data) {
+      return data.totalAmount is number && data.totalAmount >= 0
+        && data.paymentMethod in ['cash', 'card', 'debt']
+        && data.items is list
+        && (!('orderNumber' in data) || data.orderNumber == null || data.orderNumber is number)
+        && (!('customerId' in data) || data.customerId == null || (data.customerId is string && data.customerId.size() <= 128))
+        && (!('customerName' in data) || data.customerName == null || (data.customerName is string && data.customerName.size() <= 150))
+        && (!('shiftId' in data) || data.shiftId == null || (data.shiftId is string && data.shiftId.size() <= 128))
+        && (!('receiptNumber' in data) || data.receiptNumber == null || (data.receiptNumber is string && data.receiptNumber.size() <= 64))
+        && (!('receivedAmount' in data) || data.receivedAmount == null || data.receivedAmount is number)
+        && (!('changeAmount' in data) || data.changeAmount == null || data.changeAmount is number)
+        && (!('status' in data) || data.status == null || data.status in ['completed', 'cancelled'])
+        && (!('cancelledBy' in data) || data.cancelledBy == null || (data.cancelledBy is string && data.cancelledBy.size() <= 150));
+    }
+
+    function isValidShift(data) {
+      return data.startCash is number
+        && data.status in ['open', 'closed']
+        && (!('endExpectedCash' in data) || data.endExpectedCash == null || data.endExpectedCash is number)
+        && (!('endActualCash' in data) || data.endActualCash == null || data.endActualCash is number)
+        && (!('totalCash' in data) || data.totalCash == null || data.totalCash is number)
+        && (!('totalCard' in data) || data.totalCard == null || data.totalCard is number)
+        && (!('totalDebt' in data) || data.totalDebt == null || data.totalDebt is number)
+        && (!('totalCashIn' in data) || data.totalCashIn == null || data.totalCashIn is number)
+        && (!('totalCashOut' in data) || data.totalCashOut == null || data.totalCashOut is number)
+        && (!('cashierId' in data) || data.cashierId == null || (data.cashierId is string && data.cashierId.size() <= 128))
+        && (!('cashierName' in data) || data.cashierName == null || (data.cashierName is string && data.cashierName.size() <= 150));
+    }
+
+    function isValidCashFlow(data) {
+      return data.type in ['in', 'out']
+        && data.amount is number && data.amount > 0
+        && data.category is string && data.category.size() <= 100
+        && (!('shiftId' in data) || data.shiftId == null || (data.shiftId is string && data.shiftId.size() <= 128))
+        && (!('source' in data) || data.source == null || (data.source is string && data.source.size() <= 50))
+        && (!('note' in data) || data.note == null || (data.note is string && data.note.size() <= 300))
+        && (!('supplierId' in data) || data.supplierId == null || (data.supplierId is string && data.supplierId.size() <= 128))
+        && (!('supplierName' in data) || data.supplierName == null || (data.supplierName is string && data.supplierName.size() <= 200));
+    }
+
+    function isValidTransaction(data) {
+      return data.accountId is string && data.accountId.size() <= 64
+        && data.type in ['income', 'expense']
+        && data.amount is number && data.amount > 0
+        && data.category is string && data.category.size() <= 100
+        && (!('source' in data) || data.source == null || (data.source is string && data.source.size() <= 50))
+        && (!('description' in data) || data.description == null || (data.description is string && data.description.size() <= 300))
+        && (!('orderId' in data) || data.orderId == null || (data.orderId is string && data.orderId.size() <= 128))
+        && (!('customerId' in data) || data.customerId == null || (data.customerId is string && data.customerId.size() <= 128))
+        && (!('supplierId' in data) || data.supplierId == null || (data.supplierId is string && data.supplierId.size() <= 128));
+    }
+
+    function isValidSupplier(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && (!('currentDebt' in data) || data.currentDebt == null || data.currentDebt is number)
+        && (!('phone' in data) || data.phone == null || (data.phone is string && data.phone.size() <= 50))
+        && (!('email' in data) || data.email == null || (data.email is string && data.email.size() <= 150))
+        && (!('inn' in data) || data.inn == null || (data.inn is string && data.inn.size() <= 50))
+        && (!('address' in data) || data.address == null || (data.address is string && data.address.size() <= 300))
+        && (!('bankDetails' in data) || data.bankDetails == null || (data.bankDetails is string && data.bankDetails.size() <= 500))
+        && (!('comment' in data) || data.comment == null || (data.comment is string && data.comment.size() <= 500));
+    }
+
+    function isValidPurchaseOrder(data) {
+      return data.orderNumber is string && data.orderNumber.size() <= 64
+        && data.supplierId is string && data.supplierId.size() <= 128
+        && data.supplierName is string && data.supplierName.size() <= 200
+        && data.status in ['draft', 'confirmed', 'delivered', 'cancelled']
+        && data.items is list
+        && data.totalAmount is number
+        && (!('comment' in data) || data.comment == null || (data.comment is string && data.comment.size() <= 500))
+        && (!('authorName' in data) || data.authorName == null || (data.authorName is string && data.authorName.size() <= 150))
+        && (!('authorId' in data) || data.authorId == null || (data.authorId is string && data.authorId.size() <= 128));
+    }
+
+    match /users/{userId} {
+      allow read: if true;
+      allow create, update: if isValidId(userId) && isValidUser(incoming());
+      allow delete: if isValidId(userId);
+    }
+
+    match /store_products/{productId} {
+      allow read: if true;
+      allow create, update: if isValidId(productId) && isValidProduct(incoming());
+      allow delete: if isValidId(productId);
+    }
+
+    match /store_inventory_docs/{docId} {
+      allow read: if true;
+      allow create, update: if isValidId(docId) && isValidInventoryDoc(incoming());
+      allow delete: if isValidId(docId);
+    }
+
+    match /store_customers/{customerId} {
+      allow read: if true;
+      allow create, update: if isValidId(customerId) && isValidCustomer(incoming());
+      allow delete: if isValidId(customerId);
+    }
+
+    match /store_orders/{orderId} {
+      allow read: if true;
+      allow create, update: if isValidId(orderId) && isValidOrder(incoming());
+      allow delete: if isValidId(orderId);
+    }
+
+    match /store_shifts/{shiftId} {
+      allow read: if true;
+      allow create, update: if isValidId(shiftId) && isValidShift(incoming());
+      allow delete: if isValidId(shiftId);
+    }
+
+    match /store_cash_flows/{flowId} {
+      allow read: if true;
+      allow create, update: if isValidId(flowId) && isValidCashFlow(incoming());
+      allow delete: if isValidId(flowId);
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if true;
+      allow create, update: if isValidId(transactionId) && isValidTransaction(incoming());
+      allow delete: if isValidId(transactionId);
+    }
+
+    match /store_suppliers/{supplierId} {
+      allow read: if true;
+      allow create, update: if isValidId(supplierId) && isValidSupplier(incoming());
+      allow delete: if isValidId(supplierId);
+    }
+
+    match /store_purchase_orders/{orderId} {
+      allow read: if true;
+      allow create, update: if isValidId(orderId) && isValidPurchaseOrder(incoming());
+      allow delete: if isValidId(orderId);
+    }
+
+    match /metadata/{docId} {
+      allow read: if true;
+      allow create, update: if isValidId(docId);
+      allow delete: if isValidId(docId);
+    }
+  }
+}

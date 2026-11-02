@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="128" fill="#1e293b"/>
+  <rect x="72" y="100" width="368" height="230" rx="24" fill="#0f172a" stroke="#38bdf8" stroke-width="8"/>
+  <rect x="100" y="130" width="312" height="60" rx="12" fill="#0284c7"/>
+  <text x="256" y="172" fill="#ffffff" font-family="system-ui, sans-serif" font-size="34" font-weight="bold" text-anchor="middle" letter-spacing="2">0.00 ₽</text>
+  <rect x="100" y="210" width="60" height="40" rx="8" fill="#334155"/>
+  <rect x="175" y="210" width="60" height="40" rx="8" fill="#334155"/>
+  <rect x="250" y="210" width="60" height="40" rx="8" fill="#334155"/>
+  <rect x="325" y="210" width="87" height="40" rx="8" fill="#10b981"/>
+  <rect x="100" y="265" width="60" height="40" rx="8" fill="#334155"/>
+  <rect x="175" y="265" width="60" height="40" rx="8" fill="#334155"/>
+  <rect x="250" y="265" width="60" height="40" rx="8" fill="#334155"/>
+  <rect x="325" y="265" width="87" height="40" rx="8" fill="#f59e0b"/>
+  <path d="M120 330 L392 330 L430 420 L82 420 Z" fill="#334155" stroke="#475569" stroke-width="6"/>
+  <rect x="156" y="375" width="200" height="14" rx="7" fill="#64748b"/>
+</svg>
